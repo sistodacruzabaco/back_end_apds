@@ -1,0 +1,255 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+  output = "../ERD.png"
+  theme = "forest"
+  includeRelationFromFields = true
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Feed{
+  id String @id @default(uuid())
+  feed_description String
+  general_information String
+  kind String
+  sector String
+  imagem String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("feeds")
+  @@index([feed_description])
+}
+
+model Project {
+  id String @id @default(uuid())
+  project_name String @unique
+
+  budget Decimal?
+  balance_available Decimal?
+  local_implementation String?
+  date_start DateTime?
+  date_end DateTime?
+  project_code String?
+  account_number_project String?
+  
+  project_status ProjectStatus @default(ACTIVO)
+  type_currency Currency @default(MZN)
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  partners Partner[]
+  donations Donation[]
+  employees Employee[]
+  activities Activity[]
+  opportunities Opportunity[]
+
+  @@map("projects")
+  @@index([project_name])
+}
+
+model Partner{
+  id String @id @default(uuid())
+  partner_name String @unique
+  email String @unique
+  nuit String @unique
+  address String?
+  logotipo Bytes?
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  project_id String 
+  project Project @relation(fields: [project_id], references: [id])
+
+  @@map("partners")
+  @@index([partner_name])
+}
+
+model Donation{
+  id String @id @default(uuid())
+  email String
+  first_name String?
+  last_name String?
+  address String?
+  donor_status DonorStatus @default(ANONIMO)
+  phone_number String?
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  project_id String 
+  project   Project  @relation(fields: [project_id], references: [id])
+
+  @@map("donations")
+  @@index([email])
+}
+
+model User {
+  id        String @id @default(uuid())
+  // username  String
+  email     String @unique
+  hashed_password String
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  role      Role     @default(ADMIN)
+  employee Employee?
+
+  @@map("users")
+  // @@index([username])
+  @@index([email])
+}
+
+model Employee{
+  id String @id @default(uuid())
+  first_name String?
+  last_name String?
+  gender Gender @default(MASCULINO)
+  address String?
+  phone_number String? @unique  
+  provenance String?
+  date_birth DateTime?
+  date_start DateTime?
+  date_end DateTime?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+ 
+  civil_status CivilStatus @default(SOLTEIRO)
+
+  user_id String @unique
+  user User @relation(fields: [user_id], references: [id])
+
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+
+  activities Activity[]
+  opportunities Opportunity[]
+
+  @@map("employees")
+  @@index([first_name])
+}
+
+model Activity{
+  id String @id @default(uuid())
+  description_activity String?
+  local_activity String?
+  purpose_activity String?
+  activity_information String?
+  imagem Bytes?
+  responsible String
+  participants String?
+  
+  date_start DateTime?  
+  date_end DateTime?
+  
+  activity_status ActivityStatus @default(FINALIZADA)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  project_id String
+  project Project @relation(fields: [project_id], references: [id])
+
+  employee_id String
+  employee Employee @relation(fields: [employee_id], references: [id])
+
+  @@map("activities")
+  @@index([description_activity])
+}
+
+model Opportunity{
+  id String @id @default(uuid())
+  description_opportunity String
+  details String?
+  date_start DateTime?
+  date_end DateTime?
+  
+  responsible String?
+  published_by String
+  
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+ project_id String
+  project Project @relation(fields: [project_id], references: [id])
+
+  employee_id String
+  employee Employee @relation(fields: [employee_id], references: [id])
+  
+  @@map("opportunities")
+  @@index([description_opportunity])
+}
+
+model Developers{
+  id String @id @default(uuid())
+  developer_name String
+  general_information String
+  picture Bytes
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("developers")
+  @@index([developer_name])
+}
+
+enum ActivityStatus{
+  EM_PROGRESSO
+  FINALIZADA
+  NAO_INICIADA
+}
+
+enum CivilStatus{
+  SOLTEIRO
+  CASADO
+  DIVORCIADO
+  VIUVO
+}
+
+enum Role {
+  ROOT
+  USER
+  ADMIN
+}
+
+enum Currency{
+  MZN
+  USD
+  EUR
+  LIBRA
+}
+
+enum ProjectStatus{
+  ACTIVO
+  TERMINADO
+  CANCELADO
+}
+
+enum DonorStatus{
+  ANONIMO
+  VISIVEL
+}
+
+enum Gender{
+  MASCULINO
+  FEMININO
+  OUTRO
+}
