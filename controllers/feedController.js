@@ -17,13 +17,14 @@ module.exports.add_feed = async (req, res) => {
     const { feed_name, general_information, kind, sector} = req.body;
 
     // console.log(req.file)
+    console.log(req.body)
     
     const data = {
       feed_name: feed_name,
       general_information: general_information,
       kind: kind,
       sector: sector,
-      imagem: req.file.path
+      // imagem: req.file.path
     }
 
     // console.log(imagem)

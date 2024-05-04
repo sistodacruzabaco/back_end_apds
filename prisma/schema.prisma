@@ -26,7 +26,7 @@ model Feed{
   general_information String
   kind String
   sector String
-  imagem String
+  imagem String?
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
