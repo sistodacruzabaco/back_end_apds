@@ -14,10 +14,9 @@ module.exports.add_partner = async (req, res) => {
     try {
         const { partner_name, email, nuit, address, project_id } = req.body;
 
-        const data = { partner_name, email, nuit, address, logotipo : {data: req.file.buffer, 
-            contenType: req.file.mimetype}, project_id }
+        const data = { partner_name, email, nuit, address, logotipo : req.file.buffer, project_id }
 
-        console.log(data);
+        // console.log(data);
 
         const newPartner = await prisma.partner.create({
             data: data

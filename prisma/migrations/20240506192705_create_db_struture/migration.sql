@@ -5,7 +5,7 @@ CREATE TABLE `feeds` (
     `general_information` VARCHAR(191) NOT NULL,
     `kind` VARCHAR(191) NOT NULL,
     `sector` VARCHAR(191) NOT NULL,
-    `imagem` LONGBLOB NOT NULL,
+    `imagem` VARCHAR(191) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
