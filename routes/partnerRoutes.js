@@ -14,7 +14,7 @@ router.get('/getPartners', partnerController.get_partners);
 router.post('/addPartner', upload.single('image'), partnerController.add_partner);
 
 // PUT or UPDATE /partner
-router.put('/updatePartner/:id', upload.single('logotipo'),  partnerController.update_partner);
+router.put('/updatePartner/:id', upload.single('image'),  partnerController.update_partner);
 
 // DELETE/partner
 router.delete('/deletePartner/:id', partnerController.delete_partner);

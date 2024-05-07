@@ -12,6 +12,9 @@ module.exports.get_partners = async (req, res) => {
 
 module.exports.add_partner = async (req, res) => {
     try {
+        console.log(req.file)
+        console.log(req.body)
+
         const { partner_name, email, nuit, address, project_id } = req.body;
 
         const data = { partner_name, email, nuit, address, logotipo : req.file.buffer, project_id }

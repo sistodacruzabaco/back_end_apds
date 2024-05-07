@@ -14,7 +14,7 @@ module.exports.get_users = async (req, res) => {
 
 module.exports.add_user = async (req, res) => {
     try {
-
+        
         userValidated = await authSchema.validateAsync(req.body);
         // const { email, password, role } = userValidated;
 
@@ -38,6 +38,8 @@ module.exports.add_user = async (req, res) => {
             role: userValidated.role
         }
 
+        // console.log(data);
+        
         const newUser = await prisma.user.create({
             data: data,
         })

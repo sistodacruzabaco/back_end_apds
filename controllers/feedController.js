@@ -19,7 +19,7 @@ module.exports.add_feed = async (req, res) => {
     
     const data = {feed_description, general_information, kind, sector, imagem}
 
-    // console.log(data)
+    console.log(data)
 
     const newFeed = await prisma.feed.create({
       data: data,
