@@ -16,11 +16,12 @@ module.exports.add_donation = async (req, res) => {
         const dataValidated = await validateDonation.validateAsync(req.body);
         
         // const { email, first_name, last_name, address, phone_number, donor_status, project_id } = dataValidated;
-        // const data = { email, first_name, last_name, address, phone_number, donor_status, project_id }
+        // const data = { email, first_name, last_name, address, phone_number, donor_status, project_id}
 
-        const newDonation = await prisma.donation.create({
+        const newDonation = await prisma.donation.create ({
             data: dataValidated
         })
+
         return await res.status(201).json(newDonation);
 
     } catch (error) {
